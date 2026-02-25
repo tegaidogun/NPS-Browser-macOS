@@ -2,7 +2,9 @@
 
 ## Unreleased
 ### Changed
-- Bumped deployment target to macOS 10.13 for Xcode 16 compatibility
+- Upgraded Realm from v3 to v10.54 for native Apple Silicon support
+- Bumped Swift version from 4.0 to 5.0
+- Bumped deployment target to macOS 10.14
 - Added translucent window background using `NSVisualEffectView`
 - Updated app icon credit (iigiovanni via macOSicons)
 - Updated README with modern build instructions

@@ -9,18 +9,13 @@
 import Foundation
 import RealmSwift
 
-@objcMembers
 class CompatPack: Object {
     enum Property: String {
         case titleId, downloadUrl, type, uuid
     }
     
-    dynamic var titleId: String?
-    dynamic var downloadUrl: String?
-    dynamic var type: String?
-    dynamic var uuid: String = UUID().uuidString
-    
-    override static func primaryKey() -> String? {
-        return CompatPack.Property.uuid.rawValue
-    }
+    @Persisted var titleId: String?
+    @Persisted var downloadUrl: String?
+    @Persisted var type: String?
+    @Persisted(primaryKey: true) var uuid: String = UUID().uuidString
 }

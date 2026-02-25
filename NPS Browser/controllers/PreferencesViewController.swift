@@ -222,7 +222,7 @@ class PreferencesViewController: NSViewController {
             Defaults[.dsp_hide_invalid_url_items]   = chkHideInvalidURLItems.state == .on
 
             
-            dismissViewController(self)
+            dismiss(self)
         } catch {
             return
         }

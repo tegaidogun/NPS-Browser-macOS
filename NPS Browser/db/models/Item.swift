@@ -9,7 +9,6 @@
 import Foundation
 import RealmSwift
 
-@objcMembers
 class Item: Object {
     enum Property: String {
         case uuid,
@@ -30,27 +29,23 @@ class Item: Object {
         pk
     }
     
-    dynamic var uuid                    : String = UUID().uuidString
-    dynamic var titleId                 : String?
-    dynamic var region                  : String?
-    dynamic var contentId               : String?
-    dynamic var consoleType             : String?
-    dynamic var fileType                : String?
-    dynamic var name                    : String?
-    dynamic var pkgDirectLink           : String?
-    dynamic var rap                         : String?
-    dynamic var downloadRapFile             : String?
-    dynamic var zrif                       : String?
-    let requiredFw = RealmOptional<Float>()
-    dynamic var lastModificationDate    : Date?
-    let fileSize = RealmOptional<Int64>()
-    dynamic var sha256                  : String?
+    @Persisted(primaryKey: true) var uuid: String = UUID().uuidString
+    @Persisted var titleId: String?
+    @Persisted var region: String?
+    @Persisted var contentId: String?
+    @Persisted var consoleType: String?
+    @Persisted var fileType: String?
+    @Persisted var name: String?
+    @Persisted var pkgDirectLink: String?
+    @Persisted var rap: String?
+    @Persisted var downloadRapFile: String?
+    @Persisted var zrif: String?
+    @Persisted var requiredFw: Float?
+    @Persisted var lastModificationDate: Date?
+    @Persisted var fileSize: Int64?
+    @Persisted var sha256: String?
     
-    dynamic var pk: String = ""
-    
-    override static func primaryKey() -> String {
-        return Item.Property.uuid.rawValue
-    }
+    @Persisted var pk: String = ""
     
     convenience required init(tsvData: TSVData) {
         self.init()
@@ -59,7 +54,7 @@ class Item: Object {
         self.name = tsvData.name!
         self.pkgDirectLink = tsvData.pkgDirectLink
         self.lastModificationDate = tsvData.lastModificationDate
-        self.fileSize.value = tsvData.fileSize
+        self.fileSize = tsvData.fileSize
         self.sha256 = tsvData.sha256
         self.contentId = tsvData.contentId
         
@@ -67,7 +62,7 @@ class Item: Object {
         self.fileType = tsvData.fileType.rawValue
         
         self.zrif = tsvData.zrif
-        self.requiredFw.value = tsvData.requiredFw
+        self.requiredFw = tsvData.requiredFw
         self.rap = tsvData.rap
         self.downloadRapFile = tsvData.downloadRapFile
         
@@ -81,18 +76,18 @@ class Item: Object {
         obj.name = fromObject.name
         obj.pkgDirectLink = fromObject.pkgDirectLink
         obj.lastModificationDate = fromObject.lastModificationDate
-        obj.fileSize.value = fromObject.fileSize.value
+        obj.fileSize = fromObject.fileSize
         obj.sha256 = fromObject.sha256
         obj.contentId = fromObject.contentId
         obj.consoleType = fromObject.consoleType
         obj.fileType = fromObject.fileType
         
         obj.zrif = fromObject.zrif
-        obj.requiredFw.value = fromObject.requiredFw.value
+        obj.requiredFw = fromObject.requiredFw
         obj.rap = fromObject.rap
         obj.downloadRapFile = fromObject.downloadRapFile
         
-        let pk: String = "\(fromObject.region)\(fromObject.fileType)\(fromObject.titleId)\(fromObject.contentId)"
+        let pk: String = "\(fromObject.region ?? "")\(fromObject.fileType ?? "")\(fromObject.titleId ?? "")\(fromObject.contentId ?? "")"
         obj.pk = pk
         
         return obj

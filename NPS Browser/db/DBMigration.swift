@@ -11,27 +11,37 @@ import RealmSwift
 
 final class DBMigration {
     // MARK: - Properties
-    static let currentSchemaVersion: UInt64 = 0
+    static let currentSchemaVersion: UInt64 = 2
     
     static func configureMigration() -> Realm {
         let config = Realm.Configuration(
-            // Set the new schema version here. This must be greater than the previous version
-            schemaVersion: 1,
+            schemaVersion: 2,
             
             migrationBlock: { migration, oldSchemaVersion in
-                switch oldSchemaVersion {
-                case 1:
-                    break
-                default:
-                    // Nothing to do!
-                    // Realm will automatically detect new/removed properties and update schema on disk
+                if oldSchemaVersion < 1 {
                     zeroToOne(with: migration)
                 }
-            }
+            },
+            deleteRealmIfMigrationNeeded: true
         )
         
-        // Tell Realm to use this new configuration object for the default Realm
-        return try! Realm(configuration: config)
+        do {
+            return try Realm(configuration: config)
+        } catch {
+            // If the DB file is from an incompatible Realm version, delete and recreate
+            if let realmURL = config.fileURL {
+                let realmURLs = [
+                    realmURL,
+                    realmURL.appendingPathExtension("lock"),
+                    realmURL.appendingPathExtension("note"),
+                    realmURL.appendingPathExtension("management")
+                ]
+                for url in realmURLs {
+                    try? FileManager.default.removeItem(at: url)
+                }
+            }
+            return try! Realm(configuration: config)
+        }
     }
     
     
@@ -46,8 +56,4 @@ final class DBMigration {
             newItem?["pk"] = "\(reg)\(filetype)\(tid)\(cid)"
         }
     }
-    
-//    static func oneToTwo(with migration: Migration) {
-//        // Migration #2
-//    }
 }

@@ -9,23 +9,18 @@
 import Foundation
 import RealmSwift
 
-@objcMembers
 class Bookmark: Object {
     enum Property: String {
         case titleId,downloadUrl, name, type, zrif, uuid
     }
     
-    dynamic var titleId: String?
-    dynamic var downloadUrl: String?
-    dynamic var name: String?
-    dynamic var fileType: String?
-    dynamic var consoleType: String?
-    dynamic var zrif: String?
-    dynamic var uuid: String?
-    
-    override static func primaryKey() -> String? {
-        return Bookmark.Property.uuid.rawValue
-    }
+    @Persisted var titleId: String?
+    @Persisted var downloadUrl: String?
+    @Persisted var name: String?
+    @Persisted var fileType: String?
+    @Persisted var consoleType: String?
+    @Persisted var zrif: String?
+    @Persisted(primaryKey: true) var uuid: String?
     
     convenience init(item: Item) {
         self.init()

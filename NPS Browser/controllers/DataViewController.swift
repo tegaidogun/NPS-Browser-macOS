@@ -22,7 +22,7 @@ class DataViewController: NSViewController, ToolbarDelegate {
         return DBMigration.configureMigration()
     }()
     
-    var items: Results<Item>? = try! Realm().objects(Item.self)
+    var items: Results<Item>? = DBMigration.configureMigration().objects(Item.self)
     
     override func viewDidAppear() {
         let it = windowDelegate.getItemType()
@@ -92,8 +92,8 @@ class DataViewController: NSViewController, ToolbarDelegate {
     }
     
     func getDetailsViewController() -> DetailsViewController {
-        let sc: NSSplitViewController = parent?.childViewControllers[1] as! NSSplitViewController
-        let vc: DetailsViewController = sc.childViewControllers[0] as! DetailsViewController
+        let sc: NSSplitViewController = parent?.children[1] as! NSSplitViewController
+        let vc: DetailsViewController = sc.children[0] as! DetailsViewController
         return vc
     }
 }

@@ -24,7 +24,7 @@ class WindowController: NSWindowController, NSToolbarDelegate, WindowDelegate {
 
         applyGlassAppearanceIfAvailable()
 
-        let vc: LoadingViewController = self.storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "loadingVC")) as! LoadingViewController
+        let vc: LoadingViewController = self.storyboard?.instantiateController(withIdentifier: "loadingVC") as! LoadingViewController
         loadingViewController = vc
         
         self.delegate = getDataController()
@@ -42,11 +42,7 @@ class WindowController: NSWindowController, NSToolbarDelegate, WindowDelegate {
         let visualEffectView = NSVisualEffectView(frame: contentView.bounds)
         visualEffectView.autoresizingMask = [.width, .height]
         visualEffectView.blendingMode = .behindWindow
-        if #available(macOS 10.14, *) {
-            visualEffectView.material = .sidebar
-        } else {
-            visualEffectView.material = .appearanceBased
-        }
+        visualEffectView.material = .sidebar
         visualEffectView.state = .active
 
         for subview in contentView.subviews {
