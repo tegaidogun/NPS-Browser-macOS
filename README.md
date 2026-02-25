@@ -1,7 +1,7 @@
 # NPS Browser for macOS
 
 A Swift 4 implementation of NPS Browser.\
-**Tested and working on macOS 10.11-10.15**
+**Tested and working on macOS 10.13+ (Intel and Apple Silicon via Rosetta 2)**
 
 ![](/Screenshots/main.png?raw=true)
 
@@ -29,7 +29,7 @@ defaults delete JK3Y.NPS-Browser
 ```
 
 ## Building
-Make sure you have Xcode 10.2 and [Carthage][] installed.
+Make sure you have a recent Xcode (14+) and [Carthage][] installed.
 Open a terminal and install the dependencies:
 ```
 carthage bootstrap --platform macOS --no-use-binaries --cache-builds
@@ -42,8 +42,11 @@ Export an app bundle by going to Product > Archive > Export.
 
 #### [Changelog][]
 
+## App icon
+* Current app icon: NPS Browser icon by **iigiovanni**, from [macOSicons](https://macosicons.com)
+
 ## Thanks
-* Ann0ying for app icon
+* Ann0ying for the original app icon
 * Luro02 for the [pkg2zip][] fork
 * devnoname120 for [vitanpupdatelinks][]
 * L1cardo for Simplified Chinese translation

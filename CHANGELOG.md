@@ -1,4 +1,12 @@
 # Changelog
+
+## Unreleased
+### Changed
+- Bumped deployment target to macOS 10.13 for Xcode 16 compatibility
+- Added translucent window background using `NSVisualEffectView`
+- Updated app icon credit (iigiovanni via macOSicons)
+- Updated README with modern build instructions
+
 ## v1.4.5
 ### Fixed
 - Merged an update to fix localization files (@L1cardo)

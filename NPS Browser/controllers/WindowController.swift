@@ -21,10 +21,40 @@ class WindowController: NSWindowController, NSToolbarDelegate, WindowDelegate {
     override func windowDidLoad() {
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
         super.windowDidLoad()
+
+        applyGlassAppearanceIfAvailable()
+
         let vc: LoadingViewController = self.storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "loadingVC")) as! LoadingViewController
         loadingViewController = vc
         
         self.delegate = getDataController()
+    }
+    
+    private func applyGlassAppearanceIfAvailable() {
+        guard let window = self.window else { return }
+        guard let contentView = window.contentView, !contentView.subviews.isEmpty else { return }
+
+        window.titlebarAppearsTransparent = true
+        window.isMovableByWindowBackground = true
+        window.isOpaque = false
+        window.backgroundColor = NSColor.clear
+
+        let visualEffectView = NSVisualEffectView(frame: contentView.bounds)
+        visualEffectView.autoresizingMask = [.width, .height]
+        visualEffectView.blendingMode = .behindWindow
+        if #available(macOS 10.14, *) {
+            visualEffectView.material = .sidebar
+        } else {
+            visualEffectView.material = .appearanceBased
+        }
+        visualEffectView.state = .active
+
+        for subview in contentView.subviews {
+            subview.removeFromSuperview()
+            visualEffectView.addSubview(subview)
+        }
+
+        contentView.addSubview(visualEffectView, positioned: .below, relativeTo: nil)
     }
     
     @IBAction func onTypeChanged(_ sender: Any) {
