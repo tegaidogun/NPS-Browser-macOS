@@ -19,10 +19,10 @@ class WindowController: NSWindowController, NSToolbarDelegate, WindowDelegate {
     var loadingViewController: LoadingViewController?
 
     override func windowDidLoad() {
-        // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
         super.windowDidLoad()
 
         applyGlassAppearanceIfAvailable()
+        styleSearchBar()
 
         let vc: LoadingViewController = self.storyboard?.instantiateController(withIdentifier: "loadingVC") as! LoadingViewController
         loadingViewController = vc
@@ -32,25 +32,25 @@ class WindowController: NSWindowController, NSToolbarDelegate, WindowDelegate {
     
     private func applyGlassAppearanceIfAvailable() {
         guard let window = self.window else { return }
-        guard let contentView = window.contentView, !contentView.subviews.isEmpty else { return }
+        guard let contentView = window.contentView else { return }
 
         window.titlebarAppearsTransparent = true
-        window.isMovableByWindowBackground = true
-        window.isOpaque = false
-        window.backgroundColor = NSColor.clear
 
         let visualEffectView = NSVisualEffectView(frame: contentView.bounds)
         visualEffectView.autoresizingMask = [.width, .height]
         visualEffectView.blendingMode = .behindWindow
-        visualEffectView.material = .sidebar
-        visualEffectView.state = .active
+        visualEffectView.material = .headerView
+        visualEffectView.state = .followsWindowActiveState
 
-        for subview in contentView.subviews {
-            subview.removeFromSuperview()
-            visualEffectView.addSubview(subview)
-        }
+        contentView.addSubview(visualEffectView, positioned: .below, relativeTo: contentView.subviews.first)
+    }
 
-        contentView.addSubview(visualEffectView, positioned: .below, relativeTo: nil)
+    private func styleSearchBar() {
+        tbSearchBar.wantsLayer = true
+        tbSearchBar.layer?.borderWidth = 0.5
+        tbSearchBar.layer?.borderColor = NSColor.separatorColor.cgColor
+        tbSearchBar.layer?.cornerRadius = 6
+        tbSearchBar.layer?.backgroundColor = NSColor.textBackgroundColor.withAlphaComponent(0.85).cgColor
     }
     
     @IBAction func onTypeChanged(_ sender: Any) {

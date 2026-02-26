@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 import SwiftyUserDefaults
 
-class DataViewController: NSViewController, ToolbarDelegate {
+class DataViewController: NSViewController, ToolbarDelegate, NSTableViewDelegate {
     
     @IBOutlet var tsvResultsController: NSArrayController!
     @IBOutlet weak var tableView: NSTableView!
@@ -24,6 +24,11 @@ class DataViewController: NSViewController, ToolbarDelegate {
     
     var items: Results<Item>? = DBMigration.configureMigration().objects(Item.self)
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView?.delegate = self
+    }
+
     override func viewDidAppear() {
         let it = windowDelegate.getItemType()
         let ct = it.console.rawValue
@@ -43,10 +48,24 @@ class DataViewController: NSViewController, ToolbarDelegate {
         }
     }
 
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        updateDetailsFromSelection()
+    }
+
     @IBAction func tableSelectionChanged(_ sender: NSTableView) {
-        if (!tsvResultsController.selectedObjects.isEmpty) {
-            self.representedObject = tsvResultsController.selectedObjects.first
+        updateDetailsFromSelection()
+    }
+
+    private func updateDetailsFromSelection() {
+        guard let selected = tsvResultsController.selectedObjects, !selected.isEmpty else { return }
+        let details = getDetailsViewController()
+        details.multiSelectCount = selected.count
+        if selected.count > 1 {
+            details.selectedItems = selected.compactMap { $0 as? Item }
+        } else {
+            details.selectedItems = []
         }
+        self.representedObject = selected.first
     }
     
     func makePredicateString() -> String {

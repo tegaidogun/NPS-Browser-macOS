@@ -14,18 +14,18 @@ class GameArtworkViewController: NSViewController {
     override var representedObject: Any? {
         didSet {
             imgBoxart.image = nil
-            
+            guard representedObject is Item else { return }
             getImage()
         }
     }
     
     private func setImage(image: NSImage) {
-//        self.imgBoxart.sizeToFit()
         self.imgBoxart.image = image
     }
     
     func getImage() {
-        PSNStoreApi(item: representedObject as! Item).getImage()
+        guard let item = representedObject as? Item else { return }
+        PSNStoreApi(item: item).getImage()
             .then { image in
                 self.setImage(image: image)
         }

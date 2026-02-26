@@ -30,5 +30,6 @@ class BookmarkListItemCellView: NSTableCellView {
         
         
         Helpers().getSharedAppDelegate().downloadManager.addToDownloadQueue(data: dlItem)
+        Helpers().makeNotification(title: "Downloading", subtitle: dlItem.name ?? "")
     }
 }
