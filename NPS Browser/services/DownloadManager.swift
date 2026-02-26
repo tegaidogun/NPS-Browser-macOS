@@ -18,8 +18,35 @@ class DownloadManager {
     var downloadItems: [DLItem] = []
     let queue = Queuer(name: "DLQueue", maxConcurrentOperationCount: Defaults[.dl_concurrent_downloads], qualityOfService: .default)
     
+    private var activeBatchCount: Int = 0
+    private var completedBatchCount: Int = 0
+    private var batchTotal: Int = 0
+
     init() {
         restoreDownloadList()
+    }
+
+    func startBatch(count: Int) {
+        activeBatchCount = count
+        completedBatchCount = 0
+        batchTotal = count
+    }
+
+    func markItemCompleted() {
+        completedBatchCount += 1
+        if completedBatchCount >= activeBatchCount && activeBatchCount > 0 {
+            let total = batchTotal
+            activeBatchCount = 0
+            completedBatchCount = 0
+            batchTotal = 0
+            DispatchQueue.main.async {
+                if total == 1 {
+                    Helpers().makeNotification(title: "Download Complete", subtitle: "Your package is ready")
+                } else {
+                    Helpers().makeNotification(title: "All Downloads Complete", subtitle: "\(total) packages finished")
+                }
+            }
+        }
     }
     
     func getDestination(data: DLItem) -> DownloadRequest.DownloadFileDestination {

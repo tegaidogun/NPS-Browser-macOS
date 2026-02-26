@@ -29,7 +29,9 @@ class BookmarkListItemCellView: NSTableCellView {
         dlItem.zrif             = self.item?.zrif
         
         
-        Helpers().getSharedAppDelegate().downloadManager.addToDownloadQueue(data: dlItem)
+        let dm = Helpers().getSharedAppDelegate().downloadManager
+        dm.startBatch(count: 1)
+        dm.addToDownloadQueue(data: dlItem)
         Helpers().makeNotification(title: "Downloading", subtitle: dlItem.name ?? "")
     }
 }

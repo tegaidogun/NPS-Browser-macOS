@@ -70,7 +70,6 @@ class ExtractionManager {
                     try Zip.unzipFile(item.cpackPath!, destination: filepath!, overwrite: true, password: nil)
                     item.parentItem?.status = "Extraction Complete"
                     item.parentItem?.makeViewable()
-                    Helpers().makeNotification(title: (item.parentItem?.name!)!, subtitle: (item.parentItem?.status!)!)
                 }
                 try Zip.unzipFile(item.destinationURL!, destination: filepath!, overwrite: true, password: nil)
                 completeDownload(status: "Extraction Complete")
@@ -110,7 +109,7 @@ class ExtractionManager {
                     
                     self.setStatus("Extraction Complete")
                     self.item.makeViewable()
-                    Helpers().makeNotification(title: self.item.name!, subtitle: self.item.status!)
+                    self.downloadManager.markItemCompleted()
                 } else {
                     debugPrint("Task Failed")
                 }
@@ -131,10 +130,9 @@ class ExtractionManager {
     private func completeDownload(status: String) {
         setStatus(status)
         self.item.makeViewable()
-        Helpers().makeNotification(title: self.item.name!, subtitle: self.item.status!)
         
         downloadManager.moveToCompleted(item: self.item)
-        return
+        downloadManager.markItemCompleted()
     }
     
     private func shouldDoExtract() -> Bool {

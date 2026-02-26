@@ -146,11 +146,14 @@ class DetailsViewController: NSViewController {
         }
 
         if queuedCount > 0 {
+            let dm = Helpers().getSharedAppDelegate().downloadManager
+            dm.startBatch(count: queuedCount)
+
             if queuedCount == 1 {
                 let name = itemsToDownload.first?.name ?? "Download"
                 Helpers().makeNotification(title: "Downloading", subtitle: name)
             } else {
-                Helpers().makeNotification(title: "Downloading \(queuedCount) items", subtitle: "Added to download queue")
+                Helpers().makeNotification(title: "Downloading \(queuedCount) packages", subtitle: "Added to download queue")
             }
         }
     }
