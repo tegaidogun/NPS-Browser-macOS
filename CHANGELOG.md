@@ -1,13 +1,27 @@
 # Changelog
 
 ## Unreleased
+### Added
+- Multi-select downloads: Cmd+click or Shift+click to select multiple items, then download all at once
+- Favourites checkbox in the details panel (replaces star bookmark button)
+- System notifications for download start and completion (delivered to Notification Center)
+
 ### Changed
 - Upgraded Realm from v3 to v10.54 for native Apple Silicon support
 - Bumped Swift version from 4.0 to 5.0
 - Bumped deployment target to macOS 10.14
-- Added translucent window background using `NSVisualEffectView`
+- Added subtle translucent window background using `NSVisualEffectView`
 - Updated app icon credit (iigiovanni via macOSicons)
 - Updated README with modern build instructions
+- Download popover now shows all items and auto-resizes
+- Removed deprecated `NSToolbarItem` minSize/maxSize attributes
+- Bookmarks: star icon replaced with Favourites checkbox in the details panel
+
+### Fixed
+- RAP downloads (resolves #64)
+- PSV Themes missing update URL error
+- GameArtworkViewController crash when multi-selecting items
+- Per-item completion notifications replaced with single notification when all packages in a batch finish
 
 ## v1.4.5
 ### Fixed
